@@ -14,6 +14,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use DateTime;
+use Doctrine\DBAL\Types\Type;
 
 #[ORM\Entity(repositoryClass: GameRepository::class)]
 #[ApiResource(graphQlOperations: [
@@ -38,10 +40,13 @@ class Game
     #[ORM\Column(type: Types::ARRAY)]
     private array $genres = [];
 
-    #[ORM\Column(nullable: true)]
-    private ?int $publicationDate = null;
+    #[ORM\Column(nullable: true, type: Types::DATETIME_MUTABLE)]
+    private ?DateTime $publicationDate = null;
 
     #[ORM\Column(type: Types::ARRAY)]
+    /*
+    *@var string[]
+    **/
     private array $platform = [];
 
     #[ORM\ManyToMany(targetEntity: Editor::class, inversedBy: 'games')]
@@ -85,12 +90,12 @@ class Game
         return $this;
     }
 
-    public function getPublicationDate(): ?int
+    public function getPublicationDate(): ?DateTime
     {
         return $this->publicationDate;
     }
 
-    public function setPublicationDate(?int $publicationDate): static
+    public function setPublicationDate(?DateTime $publicationDate): static
     {
         $this->publicationDate = $publicationDate;
 
